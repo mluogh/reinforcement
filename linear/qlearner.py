@@ -13,7 +13,7 @@ class QLearner():
         self.learning_rate = learning_rate
         self.epsilon = epsilon
 
-    def update_weights(self, old_state, new_state, reward, done):
+    def update_weights(self, old_state, reward, new_state, done):
         self.epsilon = self.epsilon * self.exploration_decay
 
         new_max_q = self.infer_q(new_state)[1]

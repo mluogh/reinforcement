@@ -4,7 +4,7 @@ class QLearner():
     # contains tuples of (state, action) with corresponding Q_value
     q_table = {}
 
-    def __init__(self, bins, action_space, learning_rate=0.1, gamma=0.999, epsilon=0.5, epsilon_decay=0.9):
+    def __init__(self, bins, action_space, learning_rate=0.01, gamma=0.999, epsilon=0.5, epsilon_decay=0.9):
         self.bins = bins
         self.action_space = action_space
         self.learning_rate = learning_rate
@@ -44,7 +44,7 @@ class QLearner():
 
         return np.argmax(actions), np.amax(actions)
 
-    def update(self, old_state, action, new_state, reward):
+    def update(self, old_state, action, reward, new_state):
         self.epsilon = self.epsilon * self.epsilon_decay
         old_state, new_state = self.discretize_state(old_state), self.discretize_state(new_state)
 
