@@ -7,6 +7,7 @@ class Actor():
     def __init__(self, 
             sess,
             action_space_bounds,
+            exploration_policies,
             env_space_size,
             learning_rate=0.0001,
             tau=0.001):
@@ -15,6 +16,7 @@ class Actor():
         self.learning_rate = learning_rate
         self.action_space_bounds = action_space_bounds
         self.action_space_size = len(action_space_bounds)
+        self.exploration_policies = exploration_policies
         self.tau = tau
         
         self.state_ph = tf.placeholder(tf.float32, shape=(None, env_space_size))
@@ -46,7 +48,7 @@ class Actor():
             for action in actions:
                 for i in range(len(action)):
                     # Ornstein Uhlenbeck process for exploration
-                    action[i] += 0.15 * (0 - action[i]) + 0.2 * np.random.randn(1)
+                    action[i] = self.exploration_policies[i].get_noise(action[i])
                     # bound it to the action space
                     action[i] = max(min(action[i], self.action_space_bounds[i]), -self.action_space_bounds[i])
 
@@ -72,9 +74,9 @@ class Actor():
     def create_nn(self, state, name='actor'):
 
         with tf.variable_scope(name + '_fc_1'):
-            fc1 = layer(state, 256)
+            fc1 = layer(state, 400)
         with tf.variable_scope(name + '_fc_2'):
-            fc2 = layer(fc1, 128)
+            fc2 = layer(fc1, 300)
         with tf.variable_scope(name + '_fc_3'):
             fc3 = layer(fc2, self.action_space_size, is_output=True)
 

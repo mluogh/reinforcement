@@ -42,7 +42,6 @@ class Critic():
                     self.action_ph: new_actions
                 })
        
-        # print(wanted_qs)
         for i in range(len(wanted_qs)):
             if is_terminals[i]:
                 wanted_qs[i] = rewards[i]

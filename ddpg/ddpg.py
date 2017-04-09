@@ -38,6 +38,7 @@ class ExperienceBuffer():
 class DDPG():
     def __init__(self, 
             action_space_bounds,
+            exploration_policies,
             env_space_size,
             batch_size=100,
             buffer_size=1000000,
@@ -51,7 +52,7 @@ class DDPG():
 
         self.experience_buffer = ExperienceBuffer(buffer_size)
         self.batch_size = batch_size
-        self.actor = Actor(self.sess, action_space_bounds, env_space_size, actor_learning_rate)
+        self.actor = Actor(self.sess, action_space_bounds, exploration_policies, env_space_size, actor_learning_rate)
         self.critic = Critic(self.sess, len(action_space_bounds), env_space_size, critic_learning_rate, gamma)
 
         model_vars = tf.trainable_variables()
@@ -86,7 +87,7 @@ class DDPG():
             old_states, actions, rewards, new_states, is_terminals = self.experience_buffer.get_batch(self.batch_size)
 
             self.critic.update(old_states, actions, rewards, new_states, self.actor.get_target_action(new_states), is_terminals)
-            action_derivs = self.critic.get_gradients(old_states, actions)
+            action_derivs = self.critic.get_gradients(old_states, self.actor.get_action(old_states, explore=False))
             self.actor.update(old_states, action_derivs)
     
     def save_model(self, episode):
