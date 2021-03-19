@@ -16,7 +16,7 @@ html5lib==0.999
 httplib2==0.9.1
 idna==2.0
 imageio==2.1.2
-Jinja2==2.8
+Jinja2==2.11.3
 Keras==2.0.2
 language-selector==0.1
 louis==2.6.4
