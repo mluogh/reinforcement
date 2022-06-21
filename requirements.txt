@@ -24,7 +24,7 @@ lxml==3.5.0
 Mako==1.0.3
 MarkupSafe==0.23
 mujoco-py==0.5.7
-numpy==1.12.1
+numpy==1.22.0
 oauthlib==1.0.3
 olefile==0.44
 onboard==1.2.0
